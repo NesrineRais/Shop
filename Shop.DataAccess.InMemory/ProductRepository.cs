@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace Shop.DataAccess.InMemory
 {
-    public class ProductRepsitory
+    public class ProductRepository
     {
         ObjectCache cache = MemoryCache.Default;
         List<Product> products;
 
-        public ProductRepsitory()
+        public ProductRepository()
         {
             //bonne pratique
             products = cache["products"] as List<Product>; //as sert a faire un cast

@@ -1,4 +1,5 @@
-﻿using Shop.Core.Models;
+﻿using Shop.Core.Logic;
+using Shop.Core.Models;
 using Shop.Core.ViewModels;
 using Shop.DataAccess.InMemory;
 using System;
@@ -11,13 +12,13 @@ namespace Shop.WebUi.Controllers
 {
     public class ProductManagerController : Controller
     {
-        ProductRepsitory context;
-        ProductCategoryRepository contextCategory;
+        IRepository<Product> context;
+        IRepository<ProductCategory> contextCategory;
 
         public ProductManagerController()
         {
-            context = new ProductRepsitory();
-            contextCategory = new ProductCategoryRepository();
+            context = new inMemoryRepository<Product>();
+            contextCategory = new inMemoryRepository<ProductCategory>();
         }
         // GET: ProductManager
         public ActionResult Index()
@@ -44,7 +45,7 @@ namespace Shop.WebUi.Controllers
             }
             else
             {
-                context.Inser(product);
+                context.Insert(product);
                 context.SaveChanges();
                 return RedirectToAction("Index");
             }
