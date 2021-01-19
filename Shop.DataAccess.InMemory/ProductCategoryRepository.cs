@@ -26,10 +26,10 @@ namespace Shop.DataAccess.InMemory
         }
         public void SaveChanges()
         {
-            cache["productCategories"] = productsCategories;
+            cache["ProductCategory"] = productsCategories;
         }
 
-        public void Inser(ProductCategory p)
+        public void Insert(ProductCategory p)
         {
             productsCategories.Add(p);
         }

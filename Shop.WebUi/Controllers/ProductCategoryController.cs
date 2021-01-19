@@ -39,7 +39,7 @@ namespace Shop.WebUi.Controllers
             }
             else
             {
-                context.Inser(product);
+                context.Insert(product);
                 context.SaveChanges();
                 return RedirectToAction("Index");
             }

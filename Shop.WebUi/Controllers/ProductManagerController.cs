@@ -1,4 +1,5 @@
 ﻿using Shop.Core.Models;
+using Shop.Core.ViewModels;
 using Shop.DataAccess.InMemory;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,12 @@ namespace Shop.WebUi.Controllers
     public class ProductManagerController : Controller
     {
         ProductRepsitory context;
+        ProductCategoryRepository contextCategory;
 
         public ProductManagerController()
         {
             context = new ProductRepsitory();
+            contextCategory = new ProductCategoryRepository();
         }
         // GET: ProductManager
         public ActionResult Index()
@@ -25,8 +28,11 @@ namespace Shop.WebUi.Controllers
 
         public ActionResult Create()//on parle sur la page creation qui vas recevoir un formaulaire de création d un produit
         {
-            Product p = new Product();
-            return View(p);
+            ProductCategoryViewModel viewModel = new ProductCategoryViewModel();
+            viewModel.Product = new Product();
+
+            viewModel.ProductCategories = contextCategory.Collection();
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -57,7 +63,10 @@ namespace Shop.WebUi.Controllers
                 }
                 else
                 {
-                    return View(p);
+                    ProductCategoryViewModel viewModel = new ProductCategoryViewModel();
+                    viewModel.Product = p;
+                    viewModel.ProductCategories = contextCategory.Collection();
+                    return View(viewModel);
                 }
             }
             catch (Exception)
