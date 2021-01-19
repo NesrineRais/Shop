@@ -1,6 +1,7 @@
 ﻿using Shop.Core.Logic;
 using Shop.Core.Models;
 using Shop.DataAccess.InMemory;
+using Shop.DataAccess.Sql;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace Shop.WebUi.Controllers
 
         public ProductCategoryController()
         {
-            context = new inMemoryRepository<ProductCategory>(); //si le client demain change la base de donner
+            context = new SQLRepository<ProductCategory>(new MyContext()); //si le client demain change la base de donner
             //on met a jour juste cette ligne 
         }
         // GET: ProductManager
