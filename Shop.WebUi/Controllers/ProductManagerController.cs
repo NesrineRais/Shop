@@ -50,7 +50,20 @@ namespace Shop.WebUi.Controllers
             {
                 if(image!= null)
                 {
-                    product.Image = product.Name + Path.GetExtension(image.FileName);
+                    int maxId = 0;
+                    //Récuperer la valeur max de l'id dans la base donné
+
+                    try{
+                        //si la table st vide la méthode Max renvois un null
+                        maxId = context.Collection().Max(p => p.Id);
+
+                    }
+                    catch(Exception)
+                    {
+                        maxId = 0;
+                    }
+                    int nexId = maxId + 1; 
+                    product.Image = nexId + Path.GetExtension(image.FileName);
                     image.SaveAs(Server.MapPath("~/Content/ProdImages/") + product.Image);
                 }
                 context.Insert(product);
@@ -106,7 +119,7 @@ namespace Shop.WebUi.Controllers
                     {
                         if(image != null)
                         {
-                            product.Image = product.Name + Path.GetExtension(image.FileName);
+                            product.Image = product.Id + Path.GetExtension(image.FileName);
                             image.SaveAs(Server.MapPath("~/Content/ProdImages/") + product.Image);
                         }
                         //context.Update(product); ce n'est pas un context entity framework
