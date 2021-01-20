@@ -5,6 +5,7 @@ using Shop.DataAccess.InMemory;
 using Shop.DataAccess.Sql;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -40,13 +41,18 @@ namespace Shop.WebUi.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Product product) {
+        public ActionResult Create(Product product, HttpPostedFileBase image) {
             if (!ModelState.IsValid)
             {
                 return View(product); //RESTER SUR LA M2ME PAGE AVEC LES MESSAGE ERREUR QUI VA AFFICHER
             }
             else
             {
+                if(image!= null)
+                {
+                    product.Image = product.Name + Path.GetExtension(image.FileName);
+                    image.SaveAs(Server.MapPath("~/Content/ProdImages/") + product.Image);
+                }
                 context.Insert(product);
                 context.SaveChanges();
                 return RedirectToAction("Index");
@@ -81,7 +87,7 @@ namespace Shop.WebUi.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Product product, int id)
+        public ActionResult Edit(Product product, int id, HttpPostedFileBase image)
         {
             try
             {
@@ -98,12 +104,18 @@ namespace Shop.WebUi.Controllers
                     }
                     else
                     {
+                        if(image != null)
+                        {
+                            product.Image = product.Name + Path.GetExtension(image.FileName);
+                            image.SaveAs(Server.MapPath("~/Content/ProdImages/") + product.Image);
+                        }
                         //context.Update(product); ce n'est pas un context entity framework
-                        prodToEdit.Name = product.Name;
-                        prodToEdit.Description = product.Description;
-                        prodToEdit.Category = product.Category;
-                        prodToEdit.Price = product.Price;
-                        prodToEdit.Image = product.Image;
+                        //prodToEdit.Name = product.Name;
+                        //prodToEdit.Description = product.Description;
+                        //prodToEdit.Category = product.Category;
+                        //prodToEdit.Price = product.Price;
+                        //prodToEdit.Image = product.Image;
+                        context.Update(product);
                         context.SaveChanges();
                         return RedirectToAction("Index");
                     }
@@ -153,7 +165,7 @@ namespace Shop.WebUi.Controllers
                 {
                     context.Delete(id);
                     context.SaveChanges();
-                      return RedirectToAction("Index");
+                    return RedirectToAction("Index");
                 }
             }
             catch (Exception)
